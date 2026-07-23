@@ -1,10 +1,14 @@
 name: OWASP Dependency Check
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   security-scan:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -16,10 +20,6 @@ jobs:
           path: "."
           format: "HTML"
           out: "dependency-check-report"
-          # NVD now rate-limits anonymous requests heavily (scans can take
-          # 30+ min or fail without a key). Request a free key at
-          # https://nvd.nist.gov/developers/request-an-api-key and store it as
-          # a repository secret named NVD_API_KEY.
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
@@ -28,4 +28,3 @@ jobs:
         with:
           name: Dependency-Check-Report
           path: dependency-check-report
-
